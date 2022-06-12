@@ -1,0 +1,50 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue May  3 08:55:31 2022
+
+@author: smpsm
+"""
+
+from sklearn import datasets
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+''' 데이터 읽기 과정 '''
+# 데이터셋을 읽고 훈련 집합과 테스트 집합으로 분할
+digit=datasets.load_digits()
+x_train, x_test, y_train, y_test = train_test_split(digit.data, digit.target, train_size=0.6)
+
+''' 모델 객체 생성 '''
+# MLP 분류기 모델을 학습
+mlp = MLPClassifier(hidden_layer_sizes=100, learning_rate_init=0.001,
+                    batch_size=32, max_iter=300, solver='sgd', verbose=True)
+# hidden_layer_sizes : i번째 은닉층에서 노드 개수
+#  running_rate_init : 초기 러닝레이트 설정
+#         batch_size : int, default=’auto’, weight계산에 사용하는 데이터 수,
+#                      여기서는 32이므로 64(8*8)바이트의 데이터를 두 개로 나누어 사용
+#           max_iter : 최대 반복횟수
+#             solver : 가중치 최적화 함수(τ1), sgd(stochastic gradient descent), 
+#                      adam(default)
+#            verbose : bool, default=False, 설명문 표시
+#         activation : 활성함수(τ2), tanh, relu(default) 등
+''' 모델 학습 ''' 
+mlp.fit(x_train, y_train) # 학습
+
+''' 학습된 모델로 예측 '''
+res=mlp.predict(x_test) # 테스트 집합으로 예측
+
+''' 성능 측정 '''
+# 혼동 행렬 구함
+conf=np.zeros((10,10)) 
+for i in range(len(res)):
+    conf[res[i]][y_test[i]] += 1
+print(conf)
+
+# 정확률 계산
+no_correct = 0
+for i in range(10):
+    no_correct += conf[i][i]
+accuracy = no_correct/len(res)
+print("테스트 집합에 대한 정확률은", accuracy*100, "%입니다.")
+# 정확도는 SVM 모델의 98.74%보다 열등하지만, 이 방법이 빠르다고 한다.
