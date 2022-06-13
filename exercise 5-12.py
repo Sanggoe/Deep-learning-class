@@ -5,6 +5,15 @@ Created on Wed Jun  8 20:09:21 2022
 @author: smpsm
 """
 # exercise 5-12
+'''
+다층 퍼셉트론의 성능을 끌어올리는 방법
+
+- 옵티마이저의 정확률을 비교했던 것을 토대로, optimizer는 adam 알고리즘을 사용하여 학습률을 자동으로 조절하도록 하여 학습시킨다.
+- 배치 사이즈는 196으로, 전체 데이터 수에서 딱 나누어 떨어지는 적당한 크기로 안정성과 정확률을 높인다.
+- 오차 함수는 오차값을 줄이기 위해 교차 엔트로피를 사용한다.
+- 뉴런 수를 적절한 값으로 설정(1024개, 512개)
+- 뉴런의 층 수를 2개의 층으로 축소하여 과적합을 방지한다.
+'''
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.datasets import fashion_mnist
@@ -32,7 +41,7 @@ n_output = 10
 
 # 하이퍼 매개변수 설정
 batch_siz = 196 # 한 번에 처리하는 샘플의 개수
-n_epoch = 30    # 반복 횟수
+n_epoch = 200    # 반복 횟수
 k = 5 # 5-겹, 교차 검정 시 학습과 테스트 집합을 연속된 5개 폴더로 구분하여 사용
 
 # 모델을 설계해주함는 수(모델을 나타내는 객체 modle을 반환)
@@ -63,12 +72,12 @@ def cross_validation(opt):
 # 옵티마이저에 대해 교차 검증을 실행
 acc_adam = cross_validation(Adam())
 
-# 옵티마이저의 정확률
+# 정확률
 print("Adam: ", np.array(acc_adam).mean())
 
 import matplotlib.pyplot as plt
 
-# 옵티마이저의 정확률 박스플롯
+# 정확률 박스플롯
 plt.boxplot([acc_adam], labels=["Adam"])
 plt.grid()
 plt.show()

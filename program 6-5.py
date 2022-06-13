@@ -9,6 +9,9 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.datasets import cifar10
 
+# 앞서 선행되었어야 할 코드
+# cnn.save("my_cnn.h5")
+
 # 신경망 구조와 가중치를 저장하고 있는 파일을 읽어옴
 cnn = tf.keras.models.load_model("my_cnn.h5")
 cnn.summary()

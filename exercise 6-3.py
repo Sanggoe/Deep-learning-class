@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jun  7 19:18:43 2022
+Created on Mon Jun 13 21:44:06 2022
 
 @author: smpsm
 """
@@ -10,7 +10,7 @@ import tensorflow as tf
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D,MaxPooling2D,Flatten,Dense,Dropout
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers import SGD#, Adam
 
 # MNIST 데이터셋을 읽고 신경망에 입력할 형태로 변환
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -23,14 +23,6 @@ y_test = tf.keras.utils.to_categorical(y_test, 10)
 
 cnn = Sequential()
 cnn.add(Conv2D(32,(3,3), activation='relu', input_shape=(28, 28, 1)))
-'''
-(3) CCPCCP 구조 확장으로 수행할 때
-#cnn.add(Conv2D(32,(3,3), activation='relu',
-#cnn.add(MaxPooling2D(pool_size=(2,2)))
-#cnn.add(Dropout(0.25))
-
-#cnn.add(Conv2D(64,(3,3), activation='relu'))
-'''
 cnn.add(Conv2D(64,(3,3), activation='relu'))
 cnn.add(MaxPooling2D(pool_size=(2,2)))
 cnn.add(Dropout(0.25))
@@ -41,9 +33,20 @@ cnn.add(Dense(10, activation='softmax'))
 
 
 # 신경망 학습
-cnn.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
-hist=cnn.fit(x_train, y_train, batch_size=128, epochs=100,
+
+'''
+loss='categorical_crossentropy', optimizer=Adam(), epoch은 12일 때 
+교차 엔트로피와 Adam을 사용했을 때의 정확률은 99.26999807357788
+
+loss='MSE', optimizer=SGD(), epoch은 12일 때 
+MSE와 SGD를 사용했을 때의 정확률은 74.40000176429749
+
+월등히 차이가 많이 난다!!!
+'''
+cnn.compile(loss='MSE', optimizer=SGD(), metrics=['accuracy'])
+hist=cnn.fit(x_train, y_train, batch_size=128, epochs=12,
              validation_data=(x_test, y_test), verbose=2)
+
 
 res=cnn.evaluate(x_test, y_test, verbose=0)
 print("정확률은", res[1]*100)

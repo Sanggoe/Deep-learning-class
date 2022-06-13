@@ -36,7 +36,7 @@ cnn.add(Dense(10, activation='softmax'))
 
 # 신경망 학습
 cnn.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
-hist=cnn.fit(x_train, y_train, batch_size=128, epochs=12,
+hist=cnn.fit(x_train, y_train, batch_size=128, epochs=1,
              validation_data=(x_test, y_test), verbose=2)
 
 cnn.summary()   # cnn 모델의 정보 출력
