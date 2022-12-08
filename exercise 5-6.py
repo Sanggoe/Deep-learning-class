@@ -14,6 +14,7 @@ from tensorflow.keras.optimizers import SGD,Adam,Adagrad,RMSprop
 from sklearn.model_selection import KFold
 import time
 start = time.time() # 시간 측정을 위한 코드
+print('시작 시간은 %d 초' % start)
 
 # fashion MNIST 읽어와서 신경망에 입력할 형태로 변환
 (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()

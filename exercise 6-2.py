@@ -4,6 +4,8 @@ Created on Mon Jun 13 20:06:16 2022
 
 @author: smpsm
 """
+# 이거 나오면 틀릴 것 같아요....
+
 
 import numpy as np
 import tensorflow as tf
@@ -34,12 +36,11 @@ cnn.add(Dense(10, activation='softmax'))
 
 # 신경망 학습
 cnn.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
-hist=cnn.fit(x_train, y_train, batch_size=128, epochs=12,
+hist=cnn.fit(x_train, y_train, batch_size=128, epochs=1,
              validation_data=(x_test, y_test), verbose=2)
 
 res=cnn.evaluate(x_test, y_test, verbose=0)
 print("정확률은", res[1]*100)
-
 
 import matplotlib.pyplot as plt
 
